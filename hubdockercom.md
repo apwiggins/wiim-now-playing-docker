@@ -55,5 +55,4 @@ Containers are configured using parameters passed at runtime (such as those abov
 
 Docker Scout scan on this build notes was performed.  Here's my take:
 
-- CVE-2024-21538 - low risk on a private LAN - Denial of Service (DoS) vulnerability in cross-spawn <7.0.5 allows attackers to crash programs with crafted input
-- CVE-2024-29415⁠ - low risk on a private LAN - Server-Side Request Forgery where an attacker can trick a server into making unauthorized requests to internal or external resources
+- CVE-2024-21538 - wnp app doesn't call npm/cross-spawn@7.0.3; additionally, it's low risk on a private LAN - Denial of Service (DoS) vulnerability in cross-spawn <7.0.5 allows attackers to crash programs with crafted input

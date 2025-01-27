@@ -7,6 +7,6 @@ services:
       dockerfile: Dockerfile
     container_name: wnp
     ports:
-      - "8080:80"
+      - "6080:80"
     restart: unless-stopped
 

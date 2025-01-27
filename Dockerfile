@@ -8,6 +8,7 @@ WORKDIR /app
 RUN apk add --no-cache git \
     && git clone https://github.com/cvdlinden/wiim-now-playing.git . \
     && npm install \
+    && npm audit fix --force \
     && apk del git
 
 # Expose the port the app runs on (default 80, but can be adjusted if necessary)
@@ -18,4 +19,3 @@ ENV PORT 80
 
 # Start the server
 CMD ["node", "server/index.js"]
-
