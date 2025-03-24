@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   wnp:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: wnp
+    network_mode: host
     ports:
       - 80:80
     restart: unless-stopped
-
