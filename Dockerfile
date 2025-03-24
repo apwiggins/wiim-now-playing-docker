@@ -1,20 +1,21 @@
-# Use the Node.js Alpine image as a base to keep the image size small
 FROM node:20-alpine
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Clone the GitHub repository
-RUN apk add --no-cache git \
-    && git clone https://github.com/cvdlinden/wiim-now-playing.git . \
-    && npm install \
-    && apk del git
+RUN apk add --no-cache tar curl
 
-# Expose the port the app runs on (default 80, but can be adjusted if necessary)
+ARG VERSION
+ENV VERSION=${VERSION}
+
+# Download and extract the tarball directly from GitHub
+RUN curl -L -o source.tar.gz "https://github.com/cvdlinden/wiim-now-playing/archive/refs/tags/${VERSION}.tar.gz" \
+    && tar -xzf source.tar.gz --strip-components=1 \
+    && rm source.tar.gz \
+    && npm install
+
 EXPOSE 80
 
-# Set the default port as an environment variable (change if needed)
 ENV PORT 80
 
-# Start the server
 CMD ["node", "server/index.js"]
+

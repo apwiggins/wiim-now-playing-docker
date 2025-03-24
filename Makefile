@@ -3,14 +3,19 @@ SHELL := /bin/bash
 PROJECT := wiimnowplaying
 REPOSITORY := apwiggins
 
-BRANCH ?= $(shell git symbolic-ref --short -q HEAD)
-VERSION ?= $(shell git describe --abbrev=0)
-TAG ?= $(shell if [[ "$(BRANCH)" == "main" ]]; then echo "latest"; else echo $(VERSION); fi)
+# Manually set the version
+VERSION := v1.6
 
 build: Dockerfile
-	docker build -t $(REPOSITORY)/$(PROJECT):$(TAG) --build-arg VERSION=$(VERSION) .
+	docker build -t $(REPOSITORY)/$(PROJECT):$(VERSION) --build-arg VERSION=$(VERSION) .
 
-push:
-	docker push $(REPOSITORY)/$(PROJECT):$(TAG)
+push: 
+	# Push the versioned image
+	docker push $(REPOSITORY)/$(PROJECT):$(VERSION)
+	
+	# Tag and push the 'latest' version
+	docker tag $(REPOSITORY)/$(PROJECT):$(VERSION) $(REPOSITORY)/$(PROJECT):latest
+	docker push $(REPOSITORY)/$(PROJECT):latest
 
 .PHONY: push
+
