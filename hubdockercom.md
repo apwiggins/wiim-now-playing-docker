@@ -49,10 +49,11 @@ Containers are configured using parameters passed at runtime (such as those abov
 
 - Image version number:
 
+Starting with wiim-now-playing version 1.6, a version tag can be appended to the image (e.g., `v1.6`).  The `latest` tag can also be used.
+
 ```docker inspect -f '{{ index .Config.Labels "build_version" }}' hub.docker.com/apwiggins/wiimnowplaying:latest```
 
 # Security
 
 Docker Scout scan on this build notes was performed.  Here's my take:
-
 - CVE-2024-21538 - wnp app doesn't call npm/cross-spawn@7.0.3; additionally, it's low risk on a private LAN - Denial of Service (DoS) vulnerability in cross-spawn <7.0.5 allows attackers to crash programs with crafted input
