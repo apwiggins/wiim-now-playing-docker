@@ -29,11 +29,11 @@ push_arm64: build_arm64
 	docker push $(REPOSITORY)/$(PROJECT):latest-arm64
 
 # Create and push a multi-arch manifest for 'latest'
-manifest: push_amd64 push_arm64
+manifest: push_arm64 push_amd64 
 	docker manifest create $(REPOSITORY)/$(PROJECT):latest \
-		--amend $(REPOSITORY)/$(PROJECT):latest \
-		--amend $(REPOSITORY)/$(PROJECT):latest-arm64
-
+		--amend $(REPOSITORY)/$(PROJECT):latest-arm64 \
+		--amend $(REPOSITORY)/$(PROJECT):latest
+		
 	docker manifest push $(REPOSITORY)/$(PROJECT):latest
 
 help:
