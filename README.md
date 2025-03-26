@@ -14,5 +14,27 @@ Based on the tremendous work by cvdlinden at https://github.com/cvdlinden/wiim-n
 - you have a Raspberry Pi or NUC running Linux
 - docker and docker-compose are installed
 
+## docker-compose.yml
+Image tags:
+| Type | Tag |
+| --- | --- |
+| AMD64 (Intel/AMD): | `image: apwiggins/wiimnowplaying:v1.6` |
+| AMD64 (latest): | `image: apwiggins/wiimnowplaying:latest` |
+| ARM64 (RPi): | `image: apwiggins/wiimnowplaying:v1.6-arm64` |
+| ARM64 (latest): | `image: apwiggins/wiimnowplaying:latest-arm64` |
+
+```
+skopeo list-tags docker://docker.io/apwiggins/wiimnowplaying
+{
+    "Repository": "docker.io/apwiggins/wiimnowplaying",
+    "Tags": [
+        "latest",
+        "latest-arm64",
+        "v1.6",
+        "v1.6-arm64"
+    ]
+}
+```
+
 ## start 
 `./wnp.sh`
