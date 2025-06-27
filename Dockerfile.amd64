@@ -15,7 +15,7 @@ RUN curl -L -o source.tar.gz "https://github.com/cvdlinden/wiim-now-playing/arch
 
 EXPOSE 80
 
-ENV PORT 80
+ENV PORT=80
 
 CMD ["node", "server/index.js"]
 

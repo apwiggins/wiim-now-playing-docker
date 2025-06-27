@@ -5,7 +5,7 @@ PROJECT := wiimnowplaying
 REPOSITORY := apwiggins
 
 # Manually set the version
-VERSION := v1.6.2
+VERSION := v1.6.3
 
 # Build for AMD64
 build_amd64: Dockerfile.amd64
