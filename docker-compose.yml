@@ -1,6 +1,6 @@
 services:
   wnp:
-    image: apwiggins/wiimnowplaying:v1.6
+    image: apwiggins/wiimnowplaying:latest #use tag like v1.6.3 for specific version
     container_name: wnp
     network_mode: host # for SSDP discovery
     environment:
