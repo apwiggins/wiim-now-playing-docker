@@ -1,0 +1,33 @@
+name: Build Docker Images
+on: 
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        arch:
+        - aarch64
+        - armv7l
+        - amd64
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASS }}
+
+    - name: Build ${{matrix.arch}}
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        file: Dockerfile
+        tags:  robbydyer/wiim-now-playing:${{github.ref_name}}
+        build-args: |
+            VERSION=${{github.ref_name}}
+        platforms: linux/amd64,linux/arm64/v8
