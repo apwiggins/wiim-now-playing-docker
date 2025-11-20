@@ -5,7 +5,7 @@ PROJECT := wiimnowplaying
 REPOSITORY := apwiggins
 
 # Manually set the version
-VERSION := v1.6.3
+VERSION := v1.7.1
 
 # Build for AMD64
 build_amd64: Dockerfile.amd64
@@ -31,6 +31,8 @@ push_arm64: build_arm64
 
 # Create and push a multi-arch manifest for 'latest'
 manifest: push_arm64 push_amd64
+	docker manifest rm $(REPOSITORY)/$(PROJECT):$(VERSION) || true
+	docker manifest rm $(REPOSITORY)/$(PROJECT):latest || true
 	docker manifest create $(REPOSITORY)/$(PROJECT):$(VERSION) \
 		--amend $(REPOSITORY)/$(PROJECT):$(VERSION)-amd64 \
 		--amend $(REPOSITORY)/$(PROJECT):$(VERSION)-arm64
@@ -53,4 +55,3 @@ help:
 	@echo "  help          Show this help message"
 
 .PHONY: help
-
