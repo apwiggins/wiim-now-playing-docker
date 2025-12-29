@@ -3,45 +3,47 @@ SHELL := /bin/bash
 #PROJECT := wiimnowplaying-test
 PROJECT := wiimnowplaying
 REPOSITORY := apwiggins
+IMAGE := $(REPOSITORY)/$(PROJECT)
+
 
 # Manually set the version
-VERSION := v1.7.1
+VERSION := v1.7.2
 
 # Build for AMD64
 build_amd64: Dockerfile.amd64
-	docker build -f Dockerfile.amd64 -t $(REPOSITORY)/$(PROJECT):$(VERSION) --build-arg VERSION=$(VERSION) .
-	docker build -f Dockerfile.amd64 -t $(REPOSITORY)/$(PROJECT):$(VERSION)-amd64 --build-arg VERSION=$(VERSION) .
-	docker tag $(REPOSITORY)/$(PROJECT):$(VERSION) $(REPOSITORY)/$(PROJECT):latest
+	docker build -f Dockerfile.amd64 -t $(IMAGE):$(VERSION) --build-arg VERSION=$(VERSION) .
+	docker build -f Dockerfile.amd64 -t $(IMAGE):$(VERSION)-amd64 --build-arg VERSION=$(VERSION) .
+	docker tag $(IMAGE):$(VERSION) $(IMAGE):latest
 
 # Build for ARM64
 build_arm64: Dockerfile.arm64
-	docker build -f Dockerfile.arm64 -t $(REPOSITORY)/$(PROJECT):$(VERSION)-arm64 --build-arg VERSION=$(VERSION) .
-	docker tag $(REPOSITORY)/$(PROJECT):$(VERSION)-arm64 $(REPOSITORY)/$(PROJECT):latest-arm64
+	docker build -f Dockerfile.arm64 -t $(IMAGE):$(VERSION)-arm64 --build-arg VERSION=$(VERSION) .
+	docker tag $(IMAGE):$(VERSION)-arm64 $(IMAGE):latest-arm64
 
 # Push AMD64 image
 push_amd64: build_amd64
-	docker push $(REPOSITORY)/$(PROJECT):$(VERSION)
-	docker push $(REPOSITORY)/$(PROJECT):$(VERSION)-amd64
-	docker push $(REPOSITORY)/$(PROJECT):latest
+	docker push $(IMAGE):$(VERSION)
+	docker push $(IMAGE):$(VERSION)-amd64
+	docker push $(IMAGE):latest
 
 # Push ARM64 image
 push_arm64: build_arm64
-	docker push $(REPOSITORY)/$(PROJECT):$(VERSION)-arm64
-	docker push $(REPOSITORY)/$(PROJECT):latest-arm64
+	docker push $(IMAGE):$(VERSION)-arm64
+	docker push $(IMAGE):latest-arm64
 
 # Create and push a multi-arch manifest for 'latest'
 manifest: push_arm64 push_amd64
-	docker manifest rm $(REPOSITORY)/$(PROJECT):$(VERSION) || true
-	docker manifest rm $(REPOSITORY)/$(PROJECT):latest || true
-	docker manifest create $(REPOSITORY)/$(PROJECT):$(VERSION) \
-		--amend $(REPOSITORY)/$(PROJECT):$(VERSION)-amd64 \
-		--amend $(REPOSITORY)/$(PROJECT):$(VERSION)-arm64
-	docker manifest push $(REPOSITORY)/$(PROJECT):$(VERSION)
+	docker manifest rm $(IMAGE):$(VERSION) || true
+	docker manifest rm $(IMAGE):latest || true
+	docker manifest create $(IMAGE):$(VERSION) \
+		--amend $(IMAGE):$(VERSION)-amd64 \
+		--amend $(IMAGE):$(VERSION)-arm64
+	docker manifest push $(IMAGE):$(VERSION)
 
-	docker manifest create $(REPOSITORY)/$(PROJECT):latest \
-		--amend $(REPOSITORY)/$(PROJECT):$(VERSION)-amd64 \
-		--amend $(REPOSITORY)/$(PROJECT):$(VERSION)-arm64
-	docker manifest push $(REPOSITORY)/$(PROJECT):latest
+	docker manifest create $(IMAGE):latest \
+		--amend $(IMAGE):$(VERSION)-amd64 \
+		--amend $(IMAGE):$(VERSION)-arm64
+	docker manifest push $(IMAGE):latest
 
 help:
 	@echo "Usage: make [target]"
