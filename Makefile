@@ -16,16 +16,13 @@ build_amd64: Dockerfile
 	docker tag $(IMAGE):$(VERSION) $(IMAGE):latest
 
 # Build for ARM64
-# build_arm64: Dockerfile.arm64
-#	docker build -f Dockerfile.arm64 -t $(IMAGE):$(VERSION)-arm64 --build-arg VERSION=$(VERSION) .
-#	docker tag $(IMAGE):$(VERSION)-arm64 $(IMAGE):latest-arm64
-
 build_arm64: Dockerfile
 	docker buildx create --use --name mybuilder 2>/dev/null || docker buildx use mybuilder
 	docker buildx build --platform linux/arm64 -f Dockerfile \
-    -t $(IMAGE):$(VERSION)-arm64 \
-    --build-arg VERSION=$(VERSION) \
-    --load .
+                -t $(IMAGE):$(VERSION)-arm64 \
+                --build-arg VERSION=$(VERSION) \
+                --load .
+	docker tag $(IMAGE):$(VERSION)-arm64 $(IMAGE):latest-arm64
 
 # Run for AMD64
 run_amd64: build_amd64
@@ -33,6 +30,8 @@ run_amd64: build_amd64
 	docker compose down --remove-orphans
 	@echo "Starting services with Compose..."
 	docker compose up
+	# Push AMD64 image
+
 # Push AMD64 image
 push_amd64: build_amd64
 	docker push $(IMAGE):$(VERSION)
