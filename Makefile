@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
-#PROJECT := wiimnowplaying-test
-PROJECT := wiimnowplaying
+PROJECT := wiimnowplaying-test
+#PROJECT := wiimnowplaying
 REPOSITORY := apwiggins
 IMAGE := $(REPOSITORY)/$(PROJECT)
 
@@ -10,16 +10,29 @@ IMAGE := $(REPOSITORY)/$(PROJECT)
 VERSION := v1.7.2
 
 # Build for AMD64
-build_amd64: Dockerfile.amd64
-	docker build -f Dockerfile.amd64 -t $(IMAGE):$(VERSION) --build-arg VERSION=$(VERSION) .
-	docker build -f Dockerfile.amd64 -t $(IMAGE):$(VERSION)-amd64 --build-arg VERSION=$(VERSION) .
+build_amd64: Dockerfile
+	docker build -f Dockerfile -t $(IMAGE):$(VERSION) --build-arg VERSION=$(VERSION) .
+	docker build -f Dockerfile -t $(IMAGE):$(VERSION)-amd64 --build-arg VERSION=$(VERSION) .
 	docker tag $(IMAGE):$(VERSION) $(IMAGE):latest
 
 # Build for ARM64
-build_arm64: Dockerfile.arm64
-	docker build -f Dockerfile.arm64 -t $(IMAGE):$(VERSION)-arm64 --build-arg VERSION=$(VERSION) .
-	docker tag $(IMAGE):$(VERSION)-arm64 $(IMAGE):latest-arm64
+# build_arm64: Dockerfile.arm64
+#	docker build -f Dockerfile.arm64 -t $(IMAGE):$(VERSION)-arm64 --build-arg VERSION=$(VERSION) .
+#	docker tag $(IMAGE):$(VERSION)-arm64 $(IMAGE):latest-arm64
 
+build_arm64: Dockerfile
+	docker buildx create --use --name mybuilder 2>/dev/null || docker buildx use mybuilder
+	docker buildx build --platform linux/arm64 -f Dockerfile \
+    -t $(IMAGE):$(VERSION)-arm64 \
+    --build-arg VERSION=$(VERSION) \
+    --load .
+
+# Run for AMD64
+run_amd64: build_amd64
+	@echo "Bringing down existing services..."
+	docker compose down --remove-orphans
+	@echo "Starting services with Compose..."
+	docker compose up
 # Push AMD64 image
 push_amd64: build_amd64
 	docker push $(IMAGE):$(VERSION)
@@ -51,6 +64,7 @@ help:
 	@echo "Available targets:"
 	@echo "  build_amd64   Build the Docker image for AMD64"
 	@echo "  build_arm64   Build the Docker image for ARM64"
+	@echo "  run_amd64     Fresh build & run (Host:80 -> Container:80)"
 	@echo "  push_amd64    Push the AMD64 image to Docker Hub"
 	@echo "  push_arm64    Push the ARM64 image to Docker Hub"
 	@echo "  manifest      Create and push a multi-arch manifest for 'latest'"

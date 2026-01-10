@@ -1,8 +1,8 @@
 services:
   wnp:
-    image: apwiggins/wiimnowplaying:latest #use tag like v1.6.3 for specific version
+    image: apwiggins/wiimnowplaying-test:latest #use tag like v1.6.3 for specific version
     container_name: wnp
     network_mode: host # for SSDP discovery
     environment:
-      - PORT=8080      # defaults to port 80 unless PORT is set
+      - PORT=80      # defaults to port 80 unless PORT is set
     restart: unless-stopped
