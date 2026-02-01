@@ -57,6 +57,9 @@ manifest: push_arm64 push_amd64
 		--amend $(IMAGE):$(VERSION)-arm64
 	docker manifest push $(IMAGE):latest
 
+ -60 clean:                                                                                                                                                                                                
+ -61    docker rmi -f $(IMAGE):$(VERSION) $(IMAGE):latest $(IMAGE):$(VERSION)-amd64 $(IMAGE):$(VERSION)-arm64 $(IMAGE):latest-arm64 2>/dev/null || true 
+
 help:
 	@echo "Usage: make [target]"
 	@echo ""
@@ -67,6 +70,7 @@ help:
 	@echo "  push_amd64    Push the AMD64 image to Docker Hub"
 	@echo "  push_arm64    Push the ARM64 image to Docker Hub"
 	@echo "  manifest      Create and push a multi-arch manifest for 'latest'"
+	@echo "  clean         Remove built images"
 	@echo "  help          Show this help message"
 
 .PHONY: help
