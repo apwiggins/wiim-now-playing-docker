@@ -57,9 +57,14 @@ manifest: push_arm64 push_amd64
 		--amend $(IMAGE):$(VERSION)-arm64
 	docker manifest push $(IMAGE):latest
 
- -60 clean:                                                                                                                                                                                                
- -61    docker rmi -f $(IMAGE):$(VERSION) $(IMAGE):latest $(IMAGE):$(VERSION)-amd64 $(IMAGE):$(VERSION)-arm64 $(IMAGE):latest-arm64 2>/dev/null || true 
-
+clean:
+	docker rmi -f \
+		$(IMAGE):$(VERSION) \
+		$(IMAGE):latest \
+		$(IMAGE):$(VERSION)-amd64 \
+		$(IMAGE):$(VERSION)-arm64 \
+		$(IMAGE):latest-arm64 \
+		2>/dev/null || true
 help:
 	@echo "Usage: make [target]"
 	@echo ""
