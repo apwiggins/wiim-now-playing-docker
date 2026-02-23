@@ -12,7 +12,9 @@ COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN curl -L -o source.tar.gz "https://github.com/cvdlinden/wiim-now-playing/archive/refs/tags/${VERSION}.tar.gz" \
     && tar -xzf source.tar.gz --strip-components=1 \
     && rm source.tar.gz \
-    && npm install
+    && npm install \
+    && apk del tar curl
+
 
 EXPOSE 80
 ENV PORT=80
