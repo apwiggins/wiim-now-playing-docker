@@ -15,7 +15,6 @@ RUN curl -L -o source.tar.gz "https://github.com/cvdlinden/wiim-now-playing/arch
     && npm install \
     && apk del tar curl
 
-
 EXPOSE 80
 ENV PORT=80
 

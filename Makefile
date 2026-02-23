@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-#PROJECT := wiimnowplaying-test
+# PROJECT := wiimnowplaying-test
 PROJECT := wiimnowplaying
 REPOSITORY := apwiggins
 IMAGE := $(REPOSITORY)/$(PROJECT)
