@@ -1,13 +1,13 @@
 SHELL := /bin/bash
 
 PROJECT := wiimnowplaying-test
-#PROJECT := wiimnowplaying
+# PROJECT := wiimnowplaying
 REPOSITORY := apwiggins
 IMAGE := $(REPOSITORY)/$(PROJECT)
 
 
 # Manually set the version
-VERSION := v1.8.2
+VERSION := v1.8.3
 
 # Build for AMD64
 build_amd64: Dockerfile

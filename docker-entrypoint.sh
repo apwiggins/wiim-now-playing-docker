@@ -1,7 +1,14 @@
 #!/bin/sh
 set -e
 
+echo "--------------------------"
 echo "WNP version: ${VERSION:-Unknown}"
+echo "Node version: $(node -v)"
+echo "Listening on port: ${PORT:-80}"
+echo "** non-privileged user: $(id -u) needs port to be > 1024 **"
+echo "Data directory: /app/data (ensure this is mounted as a volume for persistence)"
+echo "--------------------------"
+echo
 echo "--------------------------"
 
 # Execute the CMD from Dockerfile

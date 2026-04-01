@@ -20,13 +20,19 @@ WORKDIR /app
 
 COPY --from=builder /app /app
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN cd /app && rm Dockerfile docker-compose.yml docker-update.sh && rm -rf docs
+
+ARG VERSION
+ENV VERSION=$VERSION
+
+RUN mkdir -p /app/data
 
 # Security: Set ownership and switch to non-root user
 RUN chown -R node:node /app
 USER node
 
-EXPOSE 80
-ENV PORT=80
+EXPOSE 8080
+ENV PORT=8080
 
 ENTRYPOINT ["/sbin/tini", "--", "/app/docker-entrypoint.sh"]
 CMD ["node", "server/index.js"]

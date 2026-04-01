@@ -1,6 +1,3 @@
-[wiim-now-playing](https://github.com/cvdlinden/wiim-now-playing) shows what the WiiM device is currently playing on a separate screen.
-
-# Credit
 This is based on the tremendous [work](https://github.com/cvdlinden/wiim-now-playing) by Caspar van den Linden (cvdlinden).  He has built a nodejs service that interacts with a local WiiM device to display current track, album art, and audio quality information.  It's very cool!
 
 # Usage
@@ -12,24 +9,34 @@ To help you get started creating a container from this image you can either use 
 ## docker-compose (recommended)
 To support [SSDP](https://en.wikipedia.org/wiki/Simple_Service_Discovery_Protocol) protocol discovery of your WiiM device, `network_mode` is set to `host`.
 
+NOTE: Recent changes to a rootless container means that port 80 no longer is possible.
 ```
 services:
   wnp:
-    image: apwiggins/wiimnowplaying:latest
+    image: apwiggins/wiimnowplaying-test:latest #use tag like v1.6.3 for specific version
     container_name: wnp
     network_mode: host # for SSDP discovery
     environment:
-      - PORT=8080      # defaults to port 80 unless PORT is set
+      - PORT=8080      # defaults to port 8080 unless PORT is set
+                       # now runs rootless with a non-privileged user,
+                       # so port MUST be larger than 1024
     restart: unless-stopped
+    volumes:
+      - wnp-data:/app/data
+
+volumes:
+  wnp-data:
 ```
 
 ## Parameters
 
-Containers are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate <external>:<internal> respectively. For example, -p 8080:80 would expose port 80 from inside the container to be accessible from the host's IP on port 8080 outside the container.
+Containers are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate <external>:<internal> respectively. For example, -p 9000:8080 would expose port 8080 from inside the container to be accessible from the host's IP on port 9000 outside the container.
+
+**IMPORTANT:** A recent change to a rootless container architecture means that `PORT` MUST be LARGER THAN 1024 or the port is denied.  The longstanding default PORT has been remapped from 80 to 8080.
 
 | Parameter   | Function            |
 |-------------|---------------------|
-| PORT=8080   | Unless set, defaults to 80 |
+| PORT=9000   | Unless set, defaults to 8080 |
 
 ## Support Info
 
@@ -55,5 +62,5 @@ Starting with wiim-now-playing version 1.6, a version tag can be appended to the
 
 # Security
 
-Docker Scout scan on this build notes was performed.  Here's my take:
-- CVE-2024-21538 - wnp app doesn't call npm/cross-spawn@7.0.3; additionally, it's low risk on a private LAN - Denial of Service (DoS) vulnerability in cross-spawn <7.0.5 allows attackers to crash programs with crafted input
+- Docker Scout scan on this build was performed.
+- Container no longer runs as root user
