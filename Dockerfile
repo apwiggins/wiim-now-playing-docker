@@ -1,5 +1,5 @@
 # --- Stage 1: Builder ---
-FROM node:25.8-alpine3.23 AS builder
+FROM node:26.2-alpine3.23 AS builder
 
 WORKDIR /app
 
@@ -13,14 +13,14 @@ RUN curl -L -o source.tar.gz "https://github.com/cvdlinden/wiim-now-playing/arch
 RUN npm ci --omit=dev --no-audit --no-fund
 
 # --- Stage 2: Runner ---
-FROM node:25.8-alpine3.23 AS runner
+FROM node:26.2-alpine3.23 AS runner
 
 RUN apk add --no-cache tini libcap
 WORKDIR /app
 
 COPY --from=builder /app /app
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN cd /app && rm Dockerfile docker-compose.yml docker-update.sh && rm -rf docs
+RUN cd /app && rm -rf docs
 
 ARG VERSION
 ENV VERSION=$VERSION

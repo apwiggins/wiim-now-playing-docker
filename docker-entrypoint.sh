@@ -15,7 +15,7 @@ echo "--------------------------"
 cd /app
 
 if [ "$1" = "" ]; then
-    exec CMD node server/index.js
+    exec node server/index.js
 else
     exec "$@"
 fi
