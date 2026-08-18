@@ -1,5 +1,5 @@
 # --- Stage 1: Builder ---
-FROM node:26.5-alpine3.23 AS builder
+FROM node:26.7-alpine3.24 AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN curl -L -o source.tar.gz "https://github.com/cvdlinden/wiim-now-playing/arch
 RUN npm ci --omit=dev --no-audit --no-fund
 
 # --- Stage 2: Runner ---
-FROM node:26.2-alpine3.23 AS runner
+FROM node:26.5-alpine3.24 AS runner
 
 RUN apk add --no-cache tini libcap
 WORKDIR /app

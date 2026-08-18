@@ -4,6 +4,7 @@ set -e
 echo "--------------------------"
 echo "WNP version: ${VERSION:-Unknown}"
 echo "Node version: $(node -v)"
+echo "Alpine version: $(cat /etc/alpine-release)"
 echo "Listening on port: ${PORT:-80}"
 echo "non-privileged user: $(id -u)"
 echo "Data directory: /app/data (ensure this is mounted as a volume for persistence)"
