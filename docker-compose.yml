@@ -5,8 +5,14 @@ services:
     network_mode: host # for SSDP discovery
     environment:
       - PORT=80      # defaults to port 80 unless PORT is set
-                       # now runs rootless with a non-priviledged user,
+                       # now runs rootless with a non-privileged user,
                        #so no need to run on a high port
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:80"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
     volumes:
       - wnp-data:/app/data
