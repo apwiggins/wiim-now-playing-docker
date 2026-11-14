@@ -7,7 +7,7 @@ IMAGE := $(REPOSITORY)/$(PROJECT)
 
 
 # Manually set the version
-VERSION := v1.9.12
+VERSION := v1.9.13
 
 # Build for AMD64
 build_amd64: Dockerfile
